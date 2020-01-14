@@ -1,0 +1,19 @@
+note over selain:
+käyttäjä kirjoittaa muistiinpanon
+"hep" ja painaa tallenna-nappia
+end note over
+
+note over selain:
+selain lisää muistiinpanon paikalliseen
+notes-taulukkoonsa ja piirtää kaikki
+muistiinpanot uudelleen
+end note over
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa,\n{"content":"hep","date":"2020-01-14T20:36:51.708Z"}
+
+note over palvelin:
+palvelin tallentaa uuden muistiinpanon
+muistiinsa
+end note over
+
+palvelin-->selain: HTTP 201 Created
