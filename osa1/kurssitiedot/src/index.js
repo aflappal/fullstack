@@ -40,12 +40,13 @@ const App = () => {
         {part: 'Using props to pass data', exercises: 7},
         {part: 'State of a component', exercises: 14}
     ];
+    let timesum = content.map(c => c.exercises).reduce((a, b) => a + b);
 
     return (
         <div>
             <Header course={course} />
             <Content content={content} />
-            <Total total={content[0].exercises + content[1].exercises + content[2].exercises} />
+            <Total total={timesum} />
         </div>
     );
 };
