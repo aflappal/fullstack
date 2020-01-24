@@ -2,26 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Header = (props) => {
-    return (
-        <div>
-            <h1>{props.course}</h1>
-        </div>
-    );
+    return <h1>{props.course}</h1>;
 };
 
 const Total = (props) => {
     let timesum = props.parts.map(c => c.exercises).reduce((a, b) => a + b);
-    return (
-        <div>
-            <p>Number of exercises {timesum}</p>
-        </div>
-    );
+    return <p>Number of exercises {timesum}</p>;
 };
 
 const Part = (props) => {
-    return (
-        <p>{props.part.name} {props.part.exercises}</p>
-    );
+    return <p>{props.part.name} {props.part.exercises}</p>;
 };
 
 const Content = (props) => {
