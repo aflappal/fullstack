@@ -19,16 +19,24 @@ const Feedback = (props) => {
     );
 };
 
-const StatisticLine = ({text, value}) => <p>{text} {value}</p>;
+const StatisticLine = ({text, value, unit}) => <p>{text} {value} {unit}</p>;
 
 const Statistics = (props) => {
     const {good, neutral, bad} = props.clicks;
+    const all = [good, neutral, bad];
+    const sum = all.reduce((a, b) => a + b);
+    const avg = (good - bad) / sum
+    const positive = good / sum
+
     return (
         <div>
             <h1>Statistics</h1>
             <StatisticLine text='good' value={good} />
             <StatisticLine text='neutral' value={neutral} />
             <StatisticLine text='bad' value={bad} />
+            <StatisticLine text='all' value={sum} />
+            <StatisticLine text='average' value={avg} />
+            <StatisticLine text='positive' value={positive} unit='%' />
         </div>
     );
 };
