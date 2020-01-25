@@ -7,16 +7,34 @@ const Button = ({text, handleClick}) => {
     );
 };
 
+const Anecdote = ({anecdote, votes}) => {
+    return (
+        <div>
+            <p>{anecdote}</p>
+            <p>has {votes} votes</p>
+        </div>
+    );
+};
+
 const App = ({anecdotes}) => {
     const [selected, setSelected] = useState(0);
+    const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
+    console.log(votes)
+
     const selectRandom = () => {
         const rand = Math.floor(Math.random() * anecdotes.length);
         return setSelected(rand);
-    }
+    };
+    const vote = () => {
+        const newVotes = [...votes];
+        newVotes[selected]++;
+        setVotes(newVotes);
+    };
 
     return (
         <div>
-            <p>{anecdotes[selected]}</p>
+            <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
+            <Button text='vote' handleClick={vote} />
             <Button text='next anecdote' handleClick={selectRandom} />
         </div>
     );
