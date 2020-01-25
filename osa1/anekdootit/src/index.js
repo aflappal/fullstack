@@ -16,10 +16,21 @@ const Anecdote = ({anecdote, votes}) => {
     );
 };
 
+function argmax(arr) {
+    let best = 0;
+
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] > arr[best])
+            best = i;
+    }
+
+    return best;
+}
+
 const App = ({anecdotes}) => {
     const [selected, setSelected] = useState(0);
     const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
-    console.log(votes)
+    const best = argmax(votes);
 
     const selectRandom = () => {
         const rand = Math.floor(Math.random() * anecdotes.length);
@@ -33,9 +44,12 @@ const App = ({anecdotes}) => {
 
     return (
         <div>
+            <h1>Anecdote of the day</h1>
             <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
             <Button text='vote' handleClick={vote} />
             <Button text='next anecdote' handleClick={selectRandom} />
+            <h1>Anecdote with the most votes</h1>
+            <Anecdote anecdote={anecdotes[best]} votes={votes[best]} />
         </div>
     );
 };
