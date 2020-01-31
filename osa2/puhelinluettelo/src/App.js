@@ -4,28 +4,41 @@ const Numbers = ({records}) => {
     return (
         <div>
             <h2>Numbers</h2>
-            {records.map(record => <p key={record.name}>{record.name}</p>)}
+            {records.map(record =>
+                <div key={record.name}>{record.name} {record.number}</div>
+            )}
         </div>
     );
 };
 
 const App = () => {
-    const [ persons, setPersons] = useState([{ name: 'Arto Hellas' }]);
+    const [ persons, setPersons] = useState([
+        {
+            name: 'Arto Hellas',
+            number: '040-1231244'
+        }
+    ]);
     const [ newName, setNewName ] = useState('');
+    const [ newNumber, setNewNumber ] = useState('');
 
-    const addName = (event) => {
+    const addRecord = (event) => {
         event.preventDefault();
 
         if (persons.map(rec => rec.name).includes(newName)) {
             alert(`${newName} is already added to the phonebook`);
         } else {
-            setPersons(persons.concat({name: newName}));
+            setPersons(persons.concat({name: newName, number: newNumber}));
             setNewName('');
+            setNewNumber('');
         }
     };
 
-    const handleRecordChange = (event) => {
+    const handleNameChange = (event) => {
         setNewName(event.target.value);
+    };
+
+    const handleNumberChange = (event) => {
+        setNewNumber(event.target.value);
     };
 
     return (
@@ -33,10 +46,13 @@ const App = () => {
             <h2>Phonebook</h2>
             <form>
                 <div>
-                    name: <input value={newName} onChange={handleRecordChange} />
+                    name: <input value={newName} onChange={handleNameChange} />
                 </div>
                 <div>
-                    <button type="submit" onClick={addName}>add</button>
+                    number: <input value={newNumber} onChange={handleNumberChange} />
+                </div>
+                <div>
+                    <button type="submit" onClick={addRecord}>add</button>
                 </div>
                 <Numbers records={persons} />
             </form>
