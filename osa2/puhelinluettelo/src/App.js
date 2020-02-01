@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Filter = ({filter, handleFilterChange}) => {
     return (
@@ -43,14 +44,21 @@ const PersonForm =
 };
 
 const App = () => {
-    const [ persons, setPersons] = useState([
-        {name: 'Arto Hellas', number: '040-1231244'},
-        {name: 'Maija Poppanen', number: '050-6535321'},
-        {name: 'Urho Kekkonen', number: '+358501234567'}
-    ]);
+    const [ persons, setPersons ] = useState([]);
     const [ newName, setNewName ] = useState('');
     const [ newNumber, setNewNumber ] = useState('');
     const [ filter, setFilter ] = useState('');
+
+    useEffect(() => {
+        console.log('in effect');
+        axios
+            .get('http://localhost:3001/persons')
+            .then(response => {
+                console.log('got axios response');
+                setPersons(response.data);
+            });
+    }, []);
+    console.log(persons.length, 'persons');
 
     const addRecord = (event) => {
         event.preventDefault();
