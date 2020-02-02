@@ -114,7 +114,9 @@ const App = () => {
                     .then(returnedRecord => {
                         console.log('replaced, new ', returnedRecord);
                         showMessage(`Updated the number of ${returnedRecord.name}`);
-                    });
+                    })
+                    .catch(error => showError(
+                        `Information of ${record.name} has already been removed`));
 
                 setPersons(persons.map(p => p.id !== id ? p : changedRec));
                 setNewName('');
