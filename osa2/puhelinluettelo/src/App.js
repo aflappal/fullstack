@@ -10,17 +10,24 @@ const Filter = ({filter, handleFilterChange}) => {
     );
 };
 
-const Record = ({record}) => {
+const Record = ({record, handleDelete}) => {
     return (
-        <div>{record.name} {record.number}</div>
+        <div>
+            {record.name} {record.number}
+            <button onClick={handleDelete}>delete</button>
+        </div>
     );
 };
 
-const Records = ({records}) => {
+const Records = ({records, makeDeleteHandler}) => {
     return (
         <div>
             {records.map(record =>
-                <Record key={record.name} record={record} />
+                <Record
+                    key={record.name}
+                    record={record}
+                    handleDelete={makeDeleteHandler(record.id, record.name)}
+                />
             )}
         </div>
     );
@@ -91,6 +98,21 @@ const App = () => {
         setFilter(event.target.value);
     };
 
+    const makeDeleteHandler = (id, name) => {
+        return () => {
+            if (window.confirm(`Delete ${name} ?`)) {
+                personService
+                    .del(id)
+                    .then(response => console.log(`Deleted ${name} from db`))
+                    // double deleting doesn't get caught but goes straight to
+                    // console with 'req failed 404' for whatever reason..
+                    .catch(error => console.log(error));
+
+                setPersons(persons.filter(p => p.id !== id));
+            }
+        };
+    };
+
     // just filter according to names
     const shownPersons = persons.filter(p =>
         p.name.toLowerCase().includes(filter.toLowerCase())
@@ -108,7 +130,7 @@ const App = () => {
                         addRecord={addRecord}
             />
             <h3>Numbers</h3>
-            <Records records={shownPersons} />
+            <Records records={shownPersons} makeDeleteHandler={makeDeleteHandler} />
         </div>
     );
 
