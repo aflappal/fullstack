@@ -13,4 +13,8 @@ const del = (id) => {
     return axios.delete(`${baseUrl}/${id}`);
 };
 
-export default { getAll, create, del };
+const update = (id, changedRecord) => {
+    return axios.put(`${baseUrl}/${id}`, changedRecord).then(result => result.data);
+};
+
+export default { getAll, create, del, update };
