@@ -66,7 +66,14 @@ const App = () => {
         if (persons.map(rec => rec.name).includes(newName)) {
             alert(`${newName} is already added to the phonebook`);
         } else {
-            setPersons(persons.concat({name: newName, number: newNumber}));
+            const newRecord = { name: newName, number: newNumber };
+
+            personService
+                .create(newRecord)
+                .then(returnedRecord => {
+                    console.log('added', returnedRecord);
+                    setPersons(persons.concat(returnedRecord));
+                });
             setNewName('');
             setNewNumber('');
         }

@@ -5,4 +5,8 @@ const getAll = () => {
     return axios.get(baseUrl).then(result => result.data);
 };
 
-export default { getAll };
+const create = (newRecord) => {
+    return axios.post(baseUrl, newRecord).then(result => result.data);
+};
+
+export default { getAll, create };
