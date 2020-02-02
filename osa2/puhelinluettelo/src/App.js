@@ -1,6 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import personService from './services/persons.js';
 
+const Notification = ({ message }) => {
+    if (message === null )
+        return null;
+
+    const errorStyle = {
+        color: 'red',
+        background: 'lightgrey',
+        fontSize: '20px',
+        borderStyle: 'solid',
+        borderRadius: '5px',
+        padding: '10px',
+        marginBottom: '10px',
+    };
+
+    const messageStyle = {
+        color: 'green',
+        background: 'lightgrey',
+        fontSize: '20px',
+        borderStyle: 'solid',
+        borderRadius: '5px',
+        padding: '10px',
+        marginBottom: '10px',
+    };
+
+    return (
+        <div style={message.error ? errorStyle : messageStyle}>
+            {message.text}
+        </div>
+    );
+};
+
 const Filter = ({filter, handleFilterChange}) => {
     return (
         <div>
@@ -55,6 +86,7 @@ const App = () => {
     const [ newName, setNewName ] = useState('');
     const [ newNumber, setNewNumber ] = useState('');
     const [ filter, setFilter ] = useState('');
+    const [ message, setMessage ] = useState(null);
 
     useEffect(() => {
         console.log('in effect');
@@ -81,6 +113,7 @@ const App = () => {
                     .update(id, changedRec)
                     .then(returnedRecord => {
                         console.log('replaced, new ', returnedRecord);
+                        showMessage(`Updated the number of ${returnedRecord.name}`);
                     });
 
                 setPersons(persons.map(p => p.id !== id ? p : changedRec));
@@ -95,6 +128,7 @@ const App = () => {
                 .then(returnedRecord => {
                     console.log('added', returnedRecord);
                     setPersons(persons.concat(returnedRecord));
+                    showMessage(`Added ${returnedRecord.name}`);
                 });
             setNewName('');
             setNewNumber('');
@@ -118,7 +152,10 @@ const App = () => {
             if (window.confirm(`Delete ${name} ?`)) {
                 personService
                     .del(id)
-                    .then(response => console.log(`Deleted ${name} from db`))
+                    .then(response => {
+                        console.log(`Deleted ${name} from db`);
+                        showMessage(`Deleted ${name}`);
+                    })
                     // double deleting doesn't get caught but goes straight to
                     // console with 'req failed 404' for whatever reason..
                     .catch(error => console.log(error));
@@ -133,9 +170,18 @@ const App = () => {
         p.name.toLowerCase().includes(filter.toLowerCase())
     );
 
+    const showNotification = (msg) => {
+        setMessage(msg);
+        setTimeout(() => setMessage(null), 5000);
+    };
+
+    const showError = (text) => showNotification({text: text, error: true});
+    const showMessage = (text) => showNotification({text: text, error: false});
+
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={message} />
             <Filter filter={filter} handleFilterChange={handleFilterChange} />
             <h3>Add new contact</h3>
             <PersonForm newName={newName}
