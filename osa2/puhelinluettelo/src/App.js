@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import personService from './services/persons.js';
 
 const Filter = ({filter, handleFilterChange}) => {
     return (
@@ -51,11 +51,11 @@ const App = () => {
 
     useEffect(() => {
         console.log('in effect');
-        axios
-            .get('http://localhost:3001/persons')
-            .then(response => {
-                console.log('got axios response');
-                setPersons(response.data);
+        personService
+            .getAll()
+            .then(data => {
+                console.log('got persons');
+                setPersons(data);
             });
     }, []);
     console.log(persons.length, 'persons');
