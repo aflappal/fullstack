@@ -131,6 +131,9 @@ const App = () => {
                     console.log('added', returnedRecord);
                     setPersons(persons.concat(returnedRecord));
                     showMessage(`Added ${returnedRecord.name}`);
+                })
+                .catch(error => {
+                    showError(error.response.data.error);
                 });
             setNewName('');
             setNewNumber('');
