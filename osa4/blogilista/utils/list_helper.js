@@ -10,4 +10,21 @@ const totalLikes = (blogs) => {
         .reduce(sumReducer, 0);
 };
 
-module.exports = { dummy, totalLikes };
+const favoriteBlog = (blogs) => {
+    if (!blogs || blogs.length == 0)
+        return {};
+
+    const favReducer = (fav, curr) => {
+        return curr.likes > fav.likes ? curr : fav;
+    };
+
+    const favorite = blogs.reduce(favReducer, blogs[0]);
+
+    // should these properties be removed at some earlier point already?
+    delete favorite._id;
+    delete favorite.__v;
+
+    return favorite;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog };
