@@ -85,6 +85,19 @@ test('a blog can be added', async () => {
     expect(numChangedBlogs).toBe(numInitialBlogs + 1);
 });
 
+test('a new blog with no likes set has 0 likes', async () => {
+    const newBlog = {
+        title: "No likes",
+        author: "Writer",
+        url: "http://test.com/",
+    };
+
+    await api.post('/api/blogs').send(newBlog);
+    const retBlog = await Blog.findOne({ title: "No likes" });
+    expect(retBlog.likes).toBe(0);
+});
+
+
 afterAll(() => {
     mongoose.connection.close();
 });
