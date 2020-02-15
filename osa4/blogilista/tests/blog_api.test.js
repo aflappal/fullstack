@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Blog = require('../models/blog');
 const supertest = require('supertest');
+const logger = require('../utils/logger');
 const app = require('../app');
 
 const api = supertest(app);
@@ -62,6 +63,14 @@ beforeEach(async () => {
 test('the right number of blogs is returned with GET all', async () => {
     const result = await api.get('/api/blogs');
     expect(result.body.length).toBe(initialBlogs.length);
+});
+
+test('blogs have an identifier field id instead of _id', async () => {
+    const blogs = await api.get('/api/blogs');
+    blogs.body.forEach(blog => {
+        expect(blog.id).toBeDefined();
+        expect(blog._id).toBeUndefined();
+    });
 });
 
 afterAll(() => {
