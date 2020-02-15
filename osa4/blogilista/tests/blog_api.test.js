@@ -44,16 +44,9 @@ const initialBlogs = [
         title: "TDD harms architecture",
         author: "Robert C. Martin",
         url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-        likes: 0,
+        likes: 0
     },
 ];
-
-const newBlog = {
-            title: "Type wars",
-            author: "Robert C. Martin",
-            url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-            likes: 2,
-        };
 
 beforeEach(async () => {
     await Blog.deleteMany({});
@@ -71,6 +64,25 @@ test('blogs have an identifier field id instead of _id', async () => {
         expect(blog.id).toBeDefined();
         expect(blog._id).toBeUndefined();
     });
+});
+
+test('a blog can be added', async () => {
+    const newBlog = {
+        title: "Type wars",
+        author: "Robert C. Martin",
+        url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+        likes: 2
+    };
+
+    let blogs = await api.get('/api/blogs');
+    const numInitialBlogs = blogs.body.length;
+
+    await api.post('/api/blogs').send(newBlog);
+
+    blogs = await api.get('/api/blogs');
+    const numChangedBlogs = blogs.body.length;
+
+    expect(numChangedBlogs).toBe(numInitialBlogs + 1);
 });
 
 afterAll(() => {
