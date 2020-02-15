@@ -13,4 +13,13 @@ blogsRouter.post('/', async (req, res) => {
     res.status(201).json(addedBlog.toJSON());
 });
 
+blogsRouter.delete('/:id', async (req, res) => {
+    try {
+        await Blog.findByIdAndDelete(req.params.id);
+        res.status(204).end();
+    } catch (e) {
+        res.status(204).end();
+    }
+});
+
 module.exports = blogsRouter;
