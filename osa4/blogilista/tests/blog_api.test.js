@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 const supertest = require('supertest');
 const logger = require('../utils/logger');
 const app = require('../app');
@@ -48,9 +49,24 @@ const initialBlogs = [
     },
 ];
 
+const initialUsers = [
+    {
+        username: "ukk",
+        name: "Urho Kekkonen",
+        password: "sylvi"
+    },
+    {
+        username: "koivisto",
+        name: "Mauno Koivisto",
+        password: "tellervo"
+    }
+];
+
 beforeEach(async () => {
     await Blog.deleteMany({});
     await Blog.insertMany(initialBlogs);
+    await User.deleteMany({});
+    await User.insertMany(initialUsers);
 });
 
 test('the right number of blogs is returned with GET all', async () => {
