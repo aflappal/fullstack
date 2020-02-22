@@ -1,7 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
+import PostBlogForm from './components/PostBlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
+
+const LoginForm = ({
+        handleLogin,
+        handleUsernameChange,
+        handlePasswordChange,
+        username,
+        password
+    }) => (
+    <form onSubmit={handleLogin}>
+        <div>
+            username
+            <input
+                type="text"
+                value={username}
+                name="Username"
+                onChange={handleUsernameChange}
+            />
+        </div>
+        <div>
+            password
+            <input
+                type="password"
+                value={password}
+                name="Password"
+                onChange={handlePasswordChange}
+            />
+        </div>
+        <button type="submit">login</button>
+    </form>
+);
 
 const App = () => {
     const [blogs, setBlogs] = useState([]);
@@ -11,6 +42,10 @@ const App = () => {
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
     const [user, setUser] = useState(null);
+    const [postFormVisible, setPostFormVisible] = useState(false);
+
+    const handleUsernameChange = ({ target }) => setUsername(target.value);
+    const handlePasswordChange = ({ target }) => setPassword(target.value);
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
@@ -65,71 +100,45 @@ const App = () => {
         setAuthor('');
         setUrl('');
         setBlogs(blogs.concat(returnedBlog));
+        setPostFormVisible(false);
     };
-
-    const loginForm = () => (
-        <form onSubmit={handleLogin}>
-            <div>
-                username
-                <input
-                    type="text"
-                    value={username}
-                    name="Username"
-                    onChange={({ target }) => setUsername(target.value)}
-                />
-            </div>
-            <div>
-                password
-                <input
-                    type="password"
-                    value={password}
-                    name="Password"
-                    onChange={({ target }) => setPassword(target.value)}
-                />
-            </div>
-            <button type="submit">login</button>
-        </form>
-    );
-
-    const postBlogForm = () => (
-        <form onSubmit={handlePostBlog}>
-            <div>
-                title:
-                <input
-                    type="text"
-                    value={title}
-                    name="Title"
-                    onChange={({ target }) => setTitle(target.value)}
-                />
-            </div>
-            <div>
-                author:
-                <input
-                    type="text"
-                    value={author}
-                    name="Author"
-                    onChange={({ target }) => setAuthor(target.value)}
-                />
-            </div>
-            <div>
-                url:
-                <input
-                    type="text"
-                    value={url}
-                    name="URL"
-                    onChange={({ target }) => setUrl(target.value)}
-                />
-            </div>
-            <button type="submit">create</button>
-        </form>
-    );
-
 
     if (user === null) {
         return (
             <div>
                 <h2>Log in to application</h2>
-                {loginForm()}
+                <LoginForm
+                    username={username}
+                    password={password}
+                    handleUsernameChange={handleUsernameChange}
+                    handlePasswordChange={handlePasswordChange}
+                    handleLogin={handleLogin}
+                />
+            </div>
+        );
+    };
+
+    const postBlogForm = () => {
+        const hideWhenVisible = { display: postFormVisible ? 'none' : '' };
+        const showWhenVisible = { display: postFormVisible ? '' : 'none' };
+
+        return (
+            <div>
+                <div style={hideWhenVisible}>
+                    <button onClick={() => setPostFormVisible(true)}>new blog</button>
+                </div>
+                <div style={showWhenVisible}>
+                    <PostBlogForm
+                        title={title}
+                        author={author}
+                        url={url}
+                        handleTitleChange={({ target }) => setTitle(target.value)}
+                        handleAuthorChange={({ target }) => setAuthor(target.value)}
+                        handleUrlChange={({ target }) => setUrl(target.value)}
+                        handlePostBlog={handlePostBlog}
+                    />
+                    <button onClick={() => setPostFormVisible(false)}>cancel</button>
+                </div>
             </div>
         );
     };
@@ -141,14 +150,13 @@ const App = () => {
                 <button onClick={handleLogout}>logout</button>
             </p>
             <h2>blogs</h2>
+            {postBlogForm()}
             {blogs
                 .filter(blog =>
                     blog.user && blog.user.username === user.username)
                 .map(blog =>
                     <Blog key={blog.id} blog={blog} />)
             }
-            <h2>create new</h2>
-            {postBlogForm()}
         </div>
     );
 }
