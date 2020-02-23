@@ -26,10 +26,10 @@ const Blog = ({ blog }) => {
 
     return (
         <div style={blogStyle}>
-            <div>
+            <div className="blogBasicInfo">
                 {blog.title} {blog.author} {toggleButton()}
             </div>
-            <div style={showWhenViewed}>
+            <div className="blogExtendedInfo" style={showWhenViewed}>
                 {blog.url} <br />
                 likes {blog.likes} <button>like</button><br />
                 {blog.user.name}
