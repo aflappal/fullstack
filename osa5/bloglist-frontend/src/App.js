@@ -44,9 +44,14 @@ const App = () => {
     const handleUsernameChange = ({ target }) => setUsername(target.value);
     const handlePasswordChange = ({ target }) => setPassword(target.value);
 
+    const updateBlogs = arr => {
+        const byLikes = (a, b) => b.likes - a.likes;
+        setBlogs(arr.sort(byLikes));
+    };
+
     useEffect(() => {
         blogService.getAll().then(blogs =>
-            setBlogs(blogs)
+            updateBlogs(blogs)
         )
     }, []);
 
@@ -94,14 +99,14 @@ const App = () => {
         const newLiked = { ...liked, likes: liked.likes + 1, user: liked.user.id };
         const returned = await blogService.update(newLiked);
         const newBlogs = blogs.map(b => b.id !== returned.id ? b : returned);
-        setBlogs(newBlogs);
+        updateBlogs(newBlogs);
     };
 
     const addBlog = blog => {
         blogService
             .create(blog)
             .then(returnedBlog => {
-                setBlogs(blogs.concat(returnedBlog));
+                updateBlogs(blogs.concat(returnedBlog));
             });
         setPostFormVisible(false);
     };
