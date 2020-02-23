@@ -38,9 +38,6 @@ const App = () => {
     const [blogs, setBlogs] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [title, setTitle] = useState('');
-    const [author, setAuthor] = useState('');
-    const [url, setUrl] = useState('');
     const [user, setUser] = useState(null);
     const [postFormVisible, setPostFormVisible] = useState(false);
 
@@ -92,14 +89,12 @@ const App = () => {
         setUser(null);
     };
 
-    const handlePostBlog = async (event) => {
-        event.preventDefault();
-        const blog = { title, author, url };
-        const returnedBlog = await blogService.create(blog);
-        setTitle('');
-        setAuthor('');
-        setUrl('');
-        setBlogs(blogs.concat(returnedBlog));
+    const addBlog = blog => {
+        blogService
+            .create(blog)
+            .then(returnedBlog => {
+                setBlogs(blogs.concat(returnedBlog));
+            });
         setPostFormVisible(false);
     };
 
@@ -128,15 +123,7 @@ const App = () => {
                     <button onClick={() => setPostFormVisible(true)}>new blog</button>
                 </div>
                 <div style={showWhenVisible}>
-                    <PostBlogForm
-                        title={title}
-                        author={author}
-                        url={url}
-                        handleTitleChange={({ target }) => setTitle(target.value)}
-                        handleAuthorChange={({ target }) => setAuthor(target.value)}
-                        handleUrlChange={({ target }) => setUrl(target.value)}
-                        handlePostBlog={handlePostBlog}
-                    />
+                    <PostBlogForm addBlog={addBlog} />
                     <button onClick={() => setPostFormVisible(false)}>cancel</button>
                 </div>
             </div>

@@ -1,24 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const PostBlogForm = ({
-        handlePostBlog,
-        handleTitleChange,
-        handleAuthorChange,
-        handleUrlChange,
-        title,
-        author,
-        url
-    }) => (
+const PostBlogForm = ({ addBlog }) => {
+    const [title, setTitle] = useState('');
+    const [author, setAuthor] = useState('');
+    const [url, setUrl] = useState('');
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+        addBlog({ title, author, url });
+        setTitle('');
+        setAuthor('');
+        setUrl('');
+    };
+
+    return (
         <div>
             <h2>create new</h2>
-            <form onSubmit={handlePostBlog}>
+            <form onSubmit={submitHandler}>
                 <div>
                     title:
                     <input
                         type="text"
                         value={title}
                         name="Title"
-                        onChange={handleTitleChange}
+                        onChange={({ target }) => setTitle(target.value)}
                     />
                 </div>
                 <div>
@@ -27,7 +32,7 @@ const PostBlogForm = ({
                         type="text"
                         value={author}
                         name="Author"
-                        onChange={handleAuthorChange}
+                        onChange={({ target }) => setAuthor(target.value)}
                     />
                 </div>
                 <div>
@@ -36,12 +41,13 @@ const PostBlogForm = ({
                         type="text"
                         value={url}
                         name="URL"
-                        onChange={handleUrlChange}
+                        onChange={({ target }) => setUrl(target.value)}
                     />
                 </div>
                 <button type="submit">create</button>
             </form>
         </div>
-);
+    );
+};
 
-export default PostBlogForm
+export default PostBlogForm;
