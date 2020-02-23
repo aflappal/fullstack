@@ -89,6 +89,12 @@ const App = () => {
         setUser(null);
     };
 
+    const addLike = blog => {
+        const liked = blogs.find(b => b.id === blog.id);
+        const newLiked = { ...liked, likes: liked.likes + 1 };
+        setBlogs(blogs.map(b => b.id !== newLiked.id ? b : newLiked));
+    };
+
     const addBlog = blog => {
         blogService
             .create(blog)
@@ -142,7 +148,7 @@ const App = () => {
                 .filter(blog =>
                     blog.user && blog.user.username === user.username)
                 .map(blog => {
-                    return <Blog key={blog.id} blog={blog} />
+                    return <Blog key={blog.id} blog={blog} addLike={addLike}/>
                 })
             }
         </div>

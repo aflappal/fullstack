@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLike }) => {
     Blog.propTypes = {
         blog: PropTypes.object.isRequired
     };
@@ -18,6 +18,10 @@ const Blog = ({ blog }) => {
 
     const showWhenViewed = { display: blogViewed ? '' : 'none' };
 
+    const handleLike = event => {
+        addLike(blog);
+    };
+
     const toggleButton = () => {
         return blogViewed
             ? <button onClick={() => setBlogViewed(false)}>hide</button>
@@ -31,7 +35,7 @@ const Blog = ({ blog }) => {
             </div>
             <div className="blogExtendedInfo" style={showWhenViewed}>
                 {blog.url} <br />
-                likes {blog.likes} <button>like</button><br />
+                likes {blog.likes} <button className="likeButton" onClick={handleLike}>like</button><br />
                 {blog.user.name}
             </div>
         </div>

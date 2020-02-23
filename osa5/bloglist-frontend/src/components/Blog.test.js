@@ -46,4 +46,18 @@ describe('<Blog />', () => {
 
         expect(component.container.querySelector('.blogExtendedInfo')).toBeVisible();
     });
+
+    test('clicking the like button twice calls the event handler twice', () => {
+        const mockHandler = jest.fn();
+        const component = render(
+            <Blog blog={blog} addLike={mockHandler} />
+        );
+
+        const button = component.container.querySelector('.likeButton');
+
+        fireEvent.click(button);
+        fireEvent.click(button);
+
+        expect(mockHandler.mock.calls.length).toBe(2);
+    });
 });
