@@ -5,12 +5,12 @@ import blogService from './services/blogs';
 import loginService from './services/login';
 
 const LoginForm = ({
-        handleLogin,
-        handleUsernameChange,
-        handlePasswordChange,
-        username,
-        password
-    }) => (
+    handleLogin,
+    handleUsernameChange,
+    handlePasswordChange,
+    username,
+    password
+}) => (
     <form onSubmit={handleLogin}>
         <div>
             username
@@ -47,7 +47,7 @@ const App = () => {
     useEffect(() => {
         blogService.getAll().then(blogs =>
             setBlogs(blogs)
-        )  
+        )
     }, []);
 
     useEffect(() => {
@@ -111,7 +111,7 @@ const App = () => {
                 />
             </div>
         );
-    };
+    }
 
     const postBlogForm = () => {
         const hideWhenVisible = { display: postFormVisible ? 'none' : '' };

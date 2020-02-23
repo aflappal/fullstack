@@ -8,9 +8,9 @@ const setToken = newToken => {
 };
 
 const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
-}
+    const request = axios.get(baseUrl)
+    return request.then(response => response.data)
+};
 
 const create = async newObj => {
     const config = {
@@ -21,4 +21,4 @@ const create = async newObj => {
     return response.data;
 };
 
-export default { getAll, create, setToken }
+export default { getAll, create, setToken };
