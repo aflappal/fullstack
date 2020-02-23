@@ -89,10 +89,12 @@ const App = () => {
         setUser(null);
     };
 
-    const addLike = blog => {
+    const addLike = async blog => {
         const liked = blogs.find(b => b.id === blog.id);
-        const newLiked = { ...liked, likes: liked.likes + 1 };
-        setBlogs(blogs.map(b => b.id !== newLiked.id ? b : newLiked));
+        const newLiked = { ...liked, likes: liked.likes + 1, user: liked.user.id };
+        const returned = await blogService.update(newLiked);
+        const newBlogs = blogs.map(b => b.id !== returned.id ? b : returned);
+        setBlogs(newBlogs);
     };
 
     const addBlog = blog => {
