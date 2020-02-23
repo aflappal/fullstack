@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Blog = ({ blog }) => {
+    Blog.propTypes = {
+        blog: PropTypes.object.isRequired
+    };
+
     const [blogViewed, setBlogViewed] = useState(false);
 
     const blogStyle = {
