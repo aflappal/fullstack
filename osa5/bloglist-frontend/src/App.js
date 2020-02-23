@@ -141,8 +141,9 @@ const App = () => {
             {blogs
                 .filter(blog =>
                     blog.user && blog.user.username === user.username)
-                .map(blog =>
-                    <Blog key={blog.id} blog={blog} />)
+                .map(blog => {
+                    return <Blog key={blog.id} blog={blog} />
+                })
             }
         </div>
     );
