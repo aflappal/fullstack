@@ -37,17 +37,25 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
+  let newState
+  const byDecreasingVotes = (a, b) => b.votes - a.votes
+
   switch (action.type) {
     case 'VOTE':
       const id = action.data.id
       const oldAnecdote = state.find(a => a.id === id)
       const newAnecdote = { ...oldAnecdote, votes: oldAnecdote.votes + 1}
-      return state.map(a => a.id !== id ? a : newAnecdote)
+      newState = state.map(a => a.id !== id ? a : newAnecdote)
+      break
     case 'ADD':
-      return state.concat(asObject(action.data.anecdote))
+      newState = state.concat(asObject(action.data.anecdote))
+      break
     default:
       return state
   }
+
+  newState.sort(byDecreasingVotes)
+  return newState
 }
 
 export default reducer
