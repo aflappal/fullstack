@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link, useParams
+  Switch, Route, Link, useParams, Redirect
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -17,17 +17,29 @@ const Menu = () => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote =>
+const Notification = ({ notification }) => {
+  return notification ?
+  (
+    <div>
+      <p>{notification}</p>
+    </div>
+  ) : null
+}
+
+const AnecdoteList = ({ anecdotes, setNoRedirect }) => {
+  setNoRedirect()
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdotes.map(anecdote =>
         <li key={anecdote.id}>
           <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
         </li>)}
-    </ul>
-  </div>
-)
+      </ul>
+    </div>
+  )
+}
 
 const Anecdote = ({ anecdotes }) => {
   console.log(anecdotes)
@@ -79,6 +91,9 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    setContent('')
+    setAuthor('')
+    setInfo('')
   }
 
   return (
@@ -123,10 +138,14 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+  const [redirect, setRedirect] = useState(false)
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote "${anecdote.content}" created`)
+    setTimeout(() => setNotification(''), 10000)
+    setRedirect(true)
   }
 
   const anecdoteById = (id) =>
@@ -148,18 +167,19 @@ const App = () => {
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
+        <Notification notification={notification}/>
         <Switch>
           <Route path='/about'>
             <About />
           </Route>
           <Route path='/create'>
-            <CreateNew addNew={addNew} />
+            {redirect ? <Redirect to='/' /> : <CreateNew addNew={addNew} />}
           </Route>
           <Route path='/anecdotes/:id'>
             <Anecdote anecdotes={anecdotes} />
           </Route>
           <Route path='/'>
-            <AnecdoteList anecdotes={anecdotes} />
+            <AnecdoteList anecdotes={anecdotes} setNoRedirect={() => setRedirect(false)}/>
           </Route>
         </Switch>
         <Footer />
